@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Will Bales / 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -103,8 +103,40 @@ public class Graph {
    */
   
   public int findRoot() {
+    int[] inDegree = new int[numVertices];
+    // Initialize inDegree array
+    for (int i = 0; i < numVertices; i++) {
+        for (int j : adjListArr[i]) {
+            inDegree[j]++;
+        }
+    }
 
-    // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME/SECTION AT TOP OF FILE
-    return -1;
+    // Count the number of vertices with in-degree 0
+    int vertexCount = 0;
+    // Initialize rootIndex to -1
+    int rootIndex = -1;
+
+    // Find the vertices with in-degree 0
+    for (int i = 0; i < numVertices; i++) {
+        // If in-degree is 0, increment vertexCount and set rootIndex
+        if (inDegree[i] == 0) {
+            vertexCount++;
+            rootIndex = i;
+        }
+    }
+
+    // If there is exactly one vertex with in-degree 0, return its value
+    if (vertexCount == 1) {
+        return vertexValues.get(rootIndex);
+    // If there are multiple vertices with in-degree 0, return -1
+    } else if (vertexCount > 1) {
+        return -1;
+    // If there are no vertices with in-degree 0, return -1
+    } else if (vertexCount == 0) {
+        return -1;
+    // If there is exactly one vertex with in-degree 0, return its value
+    } else {
+        return -1;
+    }
   } 
 }
