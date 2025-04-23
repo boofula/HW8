@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   ADD YOUR NAME / SECTION NUMBER HERE
+ *   Will Bales / 002
  *
  *   This java file contains the problem solutions of canFinish and
  *   numGroups methods.
@@ -79,11 +79,44 @@ class ProblemSolutions {
 
         // Build directed graph's adjacency list
         ArrayList<Integer>[] adj = getAdjList(numExams, 
-                                        prerequisites); 
+                                        prerequisites);
 
-        // ADD YOUR CODE HERE - ADD YOUR NAME / SECTION AT TOP OF FILE
-        return false;
+        // Create an array to keep track of in-degrees
+        int[] inDegree = new int[numNodes];
+        // Initialize in-degree of each node to 0
+        for (int i = 0; i < numNodes; i++) {
+            // Keep track of in-degrees for each node looping through
+            for (int neighbor : adj[i]) {
+                inDegree[neighbor]++;
+            }
+        }
+        
+        // Create a queue to store nodes with in-degree 0
+        Queue<Integer> queue = new LinkedList<>();
+        // Add all nodes with in-degree 0 to the queue
+        for (int i = 0; i < numNodes; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
+            }
+        }
 
+        // Initialize a counter to keep track of the number of nodes processed
+        int counter = 0;
+        // Process nodes in the queue
+        while (!queue.isEmpty()) {
+            // Remove a node from the queue
+            int node = queue.poll();
+            // Increment the counter
+            counter++;
+            // Decrease the in-degree of its neighbors
+            for (int neighbor : adj[node]) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+        return counter == numNodes;
     }
 
 
@@ -190,9 +223,33 @@ class ProblemSolutions {
             }
         }
 
-        // YOUR CODE GOES HERE - you can add helper methods, you do not need
-        // to put all code in this method.
-        return -1;
+        // We create a visited array to keep track of visited nodes 
+        boolean[] visited = new boolean[numNodes];
+        // Here we use a counter to track the number of groups
+        int numGroups = 0;
+
+        // We iterate through all nodes in the graph and visit each one in groups
+        for (int t = 0; t < numNodes; t++) {
+            // If the node is not visited, we perform a DFS to find all connected nodes
+            if (!visited[t]) {
+                dfs(t, graph, visited);
+                // When the DFS is complete, we have found a group
+                numGroups++;
+            }
+        }
+
+        // Return the number of groups found
+        return numGroups;
     }
 
+    private void dfs(int node, Map<Integer, List<Integer>> graph, boolean[] visited) {
+    // Turn the node into a visited one since we are visiting it
+    visited[node] = true;
+        // We recursively visit all the neighbors of the node
+        for (int neighbor : graph.getOrDefault(node, new ArrayList<>())) {
+            if (!visited[neighbor]) {
+                dfs(neighbor, graph, visited);
+            }
+        }
+    }
 }
